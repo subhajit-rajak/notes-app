@@ -7,4 +7,9 @@
     <string name="please_signing_to_continue">Please signin to continue</string>
     <string name="welcome_to">Welcome to</string>
     <string name="default_web_client_id" translatable="false">YOUR_WEB_CLIENT_ID</string>
+    <string name="description">Description</string>
+    <string name="title">Title</string>
+    <string name="done">Done</string>
+    <string name="edit_your_note">Edit your note...</string>
+    <string name="write_a_note">Write a note...</string>
 </resources>

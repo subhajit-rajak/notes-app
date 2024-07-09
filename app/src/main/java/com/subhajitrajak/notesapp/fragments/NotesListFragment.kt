@@ -20,11 +20,6 @@ class NotesListFragment : Fragment() {
     private lateinit var db: NotesDatabaseHelper
     private lateinit var notesAdapter: NotesAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
@@ -42,7 +37,7 @@ class NotesListFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentNotesListBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -50,9 +45,5 @@ class NotesListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         notesAdapter.refreshData(db.getAllNotes())
-    }
-
-    companion object {
-
     }
 }

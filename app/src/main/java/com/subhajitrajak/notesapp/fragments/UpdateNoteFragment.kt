@@ -10,26 +10,36 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.subhajitrajak.notesapp.Note
 import com.subhajitrajak.notesapp.NotesDatabaseHelper
-import com.subhajitrajak.notesapp.databinding.FragmentAddEditNoteBinding
+import com.subhajitrajak.notesapp.databinding.FragmentUpdateNoteBinding
 
-
-class AddEditNoteFragment : Fragment() {
-    private lateinit var binding: FragmentAddEditNoteBinding
-    private lateinit var db: NotesDatabaseHelper
+class UpdateNoteFragment : Fragment() {
+    private lateinit var binding: FragmentUpdateNoteBinding
     private lateinit var navController: NavController
+    private lateinit var db: NotesDatabaseHelper
+    private var noteId: Int = -1
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
         db = NotesDatabaseHelper(requireContext())
 
+        noteId = arguments?.getInt("note_id", -1) ?: -1
+        if (noteId == -1) {
+            navController.popBackStack()
+            return
+        }
+
+        val note = db.getNoteById(noteId)
+        binding.editTitle.setText(note.title)
+        binding.editDescription.setText(note.content)
+
         binding.saveBtn.setOnClickListener {
             val title = binding.editTitle.text.toString()
             val content = binding.editDescription.text.toString()
-            val note = Note(0, title, content)
-            db.insertNote(note)
-            Toast.makeText(requireContext(), "Note saved successfully", Toast.LENGTH_SHORT).show()
+            val updatedNote = Note(noteId, title, content)
+            db.updateNote(updatedNote)
             navController.popBackStack()
+            Toast.makeText(requireContext(), "Changes saved", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -37,7 +47,7 @@ class AddEditNoteFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentAddEditNoteBinding.inflate(inflater, container, false)
+        binding = FragmentUpdateNoteBinding.inflate(inflater, container, false)
         return binding.root
     }
 }
