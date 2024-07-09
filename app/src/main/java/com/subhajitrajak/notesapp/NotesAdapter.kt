@@ -11,10 +11,12 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 
 class NotesAdapter(private var notes: List<Note>, context: Context) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>()     {
+    private val db: NotesDatabaseHelper = NotesDatabaseHelper(context)
     class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.titleView)
         val contentTextView: TextView = itemView.findViewById(R.id.contentVIew)
         val updateBtn: ImageView = itemView.findViewById(R.id.updateBtn)
+        val deleteBtn: ImageView = itemView.findViewById(R.id.deleteBtn)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
@@ -34,6 +36,10 @@ class NotesAdapter(private var notes: List<Note>, context: Context) : RecyclerVi
             val bundle = Bundle()
             bundle.putInt("note_id", note.id)
             navController.navigate(R.id.action_notesListFragment_to_updateNoteFragment, bundle)
+        }
+        holder.deleteBtn.setOnClickListener {
+            db.deleteNote(note.id)
+            refreshData(db.getAllNotes())
         }
     }
 
