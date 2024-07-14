@@ -26,10 +26,15 @@ class AddEditNoteFragment : Fragment() {
         binding.saveBtn.setOnClickListener {
             val title = binding.editTitle.text.toString()
             val content = binding.editDescription.text.toString()
-            val note = Note(0, title, content)
-            db.insertNote(note)
-            Toast.makeText(requireContext(), "Note saved successfully", Toast.LENGTH_SHORT).show()
-            navController.popBackStack()
+            if (title.isEmpty() && content.isEmpty()) {
+                Toast.makeText(requireContext(), "Empty note cannot be saved", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            } else {
+                val note = Note(0, title, content)
+                db.insertNote(note)
+                Toast.makeText(requireContext(), "Note saved successfully", Toast.LENGTH_SHORT).show()
+                navController.popBackStack()
+            }
         }
     }
 

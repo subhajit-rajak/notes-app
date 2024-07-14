@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.auth.FirebaseAuth
 import com.subhajitrajak.notesapp.NotesAdapter
 import com.subhajitrajak.notesapp.NotesDatabaseHelper
 import com.subhajitrajak.notesapp.R
@@ -19,11 +22,13 @@ class NotesListFragment : Fragment() {
     private lateinit var navController: NavController
     private lateinit var db: NotesDatabaseHelper
     private lateinit var notesAdapter: NotesAdapter
+    private lateinit var auth: FirebaseAuth
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         navController = Navigation.findNavController(view)
 
+        auth = FirebaseAuth.getInstance()
         db = NotesDatabaseHelper(requireContext())
         notesAdapter = NotesAdapter(db.getAllNotes(), requireContext())
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
@@ -31,6 +36,14 @@ class NotesListFragment : Fragment() {
 
         binding.addBtn.setOnClickListener {
             navController.navigate(R.id.action_notesListFragment_to_addEditNoteFragment)
+        }
+
+        binding.logoutBtn.setOnClickListener {
+            auth.signOut()
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()
+            val go = GoogleSignIn.getClient(requireContext(), gso)
+            go.signOut()
+            navController.popBackStack()
         }
     }
 
