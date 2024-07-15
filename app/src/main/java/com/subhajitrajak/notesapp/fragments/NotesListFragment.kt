@@ -34,7 +34,7 @@ class NotesListFragment : Fragment() {
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = notesAdapter
 
-        binding.userName.text = "${auth.currentUser?.displayName}"
+        binding.userName.text = auth.currentUser?.displayName.toString()
 
         binding.addBtn.setOnClickListener {
             navController.navigate(R.id.action_notesListFragment_to_addEditNoteFragment)
