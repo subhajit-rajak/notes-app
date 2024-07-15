@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Notes App</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="please_sign_in_to_continue">Please sign in to continue</string>
@@ -10,8 +10,8 @@
     <string name="description">Description</string>
     <string name="title">Title</string>
     <string name="done">Done</string>
-    <string name="edit_your_note">Edit your note...</string>
-    <string name="write_a_note">Write a note...</string>
+    <string name="edit_your_note" tools:ignore="TypographyEllipsis">Edit your note...</string>
+    <string name="write_a_note" tools:ignore="TypographyEllipsis">Write a note...</string>
     <string name="welcome">Welcome,</string>
     <string name="sampleUserName">John Doe</string>
     <string name="addbtnDesc">Add</string>

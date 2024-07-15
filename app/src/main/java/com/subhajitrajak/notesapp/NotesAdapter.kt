@@ -10,7 +10,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.auth.FirebaseAuth
 
 class NotesAdapter(private var notes: List<Note>, private val currentUser: String, context: Context) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>()     {
     private val db: NotesDatabaseHelper = NotesDatabaseHelper(context)
