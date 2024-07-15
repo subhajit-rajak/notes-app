@@ -1,5 +1,6 @@
 package com.subhajitrajak.notesapp
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,7 +14,6 @@ import com.google.firebase.auth.FirebaseAuth
 
 class NotesAdapter(private var notes: List<Note>, private val currentUser: String, context: Context) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>()     {
     private val db: NotesDatabaseHelper = NotesDatabaseHelper(context)
-    private val auth = FirebaseAuth.getInstance()
     class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.titleView)
         val contentTextView: TextView = itemView.findViewById(R.id.contentVIew)
@@ -45,6 +45,7 @@ class NotesAdapter(private var notes: List<Note>, private val currentUser: Strin
         }
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun refreshData() {
         notes = db.getAllNotes(currentUser)
         notifyDataSetChanged()

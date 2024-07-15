@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.subhajitrajak.notesapp.fragments
 
 import android.os.Bundle

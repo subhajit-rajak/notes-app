@@ -13,4 +13,9 @@
     <string name="edit_your_note">Edit your note...</string>
     <string name="write_a_note">Write a note...</string>
     <string name="welcome">Welcome,</string>
+    <string name="sampleUserName">John Doe</string>
+    <string name="addbtnDesc">Add</string>
+    <string name="logoutBtnDesc">Logout</string>
+    <string name="update_noteBtnDesc">Update Note</string>
+    <string name="delete_noteBtnDesc">delete note</string>
 </resources>
