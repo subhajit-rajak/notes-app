@@ -13,10 +13,11 @@ class NotesDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         private const val COLUMN_ID = "id"
         private const val COLUMN_TITLE = "title"
         private const val COLUMN_CONTENT = "content"
+        private const val COLUMN_USER_ID = "user_id"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_TITLE TEXT, $COLUMN_CONTENT TEXT)"
+        val createTableQuery = "CREATE TABLE $TABLE_NAME ($COLUMN_ID INTEGER PRIMARY KEY, $COLUMN_TITLE TEXT, $COLUMN_CONTENT TEXT, $COLUMN_USER_ID TEXT)"
         db?.execSQL(createTableQuery)
     }
 
@@ -31,23 +32,24 @@ class NotesDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         val values = ContentValues().apply {
             put(COLUMN_TITLE, note.title)
             put(COLUMN_CONTENT, note.content)
+            put(COLUMN_USER_ID, note.userId)
         }
         db.insert(TABLE_NAME, null, values)
         db.close()
     }
 
-    fun getAllNotes(): List<Note> {
+    fun getAllNotes(currentUser: String): List<Note> {
         val notesList = mutableListOf<Note>()
         val db = readableDatabase
-        val query = "SELECT * FROM $TABLE_NAME"
-        val cursor = db.rawQuery(query, null)
+        val query = "SELECT * FROM $TABLE_NAME WHERE $COLUMN_USER_ID = ?"
+        val cursor = db.rawQuery(query, arrayOf(currentUser))
 
         while (cursor.moveToNext()) {
             val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
             val title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE))
             val content = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONTENT))
 
-            val note = Note(id, title, content)
+            val note = Note(id, title, content, currentUser)
             notesList.add(note)
         }
         cursor.close()
@@ -71,13 +73,17 @@ class NotesDatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE
         val db = readableDatabase
         val query = "SELECT * FROM $TABLE_NAME WHERE $COLUMN_ID = $noteId"
         val cursor = db.rawQuery(query, null)
-        cursor.moveToFirst()
-        val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
-        val title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE))
-        val content = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONTENT))
+        var note: Note? = null
+        if(cursor.moveToFirst()) {
+            val id = cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_ID))
+            val title = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_TITLE))
+            val content = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CONTENT))
+
+            note = Note(id, title, content, "")
+        }
         cursor.close()
         db.close()
-        return Note(id, title, content)
+        return note!!
     }
 
     fun deleteNote(noteId: Int) {

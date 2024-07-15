@@ -9,9 +9,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.auth.FirebaseAuth
 
-class NotesAdapter(private var notes: List<Note>, context: Context) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>()     {
+class NotesAdapter(private var notes: List<Note>, private val currentUser: String, context: Context) : RecyclerView.Adapter<NotesAdapter.NotesViewHolder>()     {
     private val db: NotesDatabaseHelper = NotesDatabaseHelper(context)
+    private val auth = FirebaseAuth.getInstance()
     class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val titleTextView: TextView = itemView.findViewById(R.id.titleView)
         val contentTextView: TextView = itemView.findViewById(R.id.contentVIew)
@@ -39,12 +41,12 @@ class NotesAdapter(private var notes: List<Note>, context: Context) : RecyclerVi
         }
         holder.deleteBtn.setOnClickListener {
             db.deleteNote(note.id)
-            refreshData(db.getAllNotes())
+            refreshData()
         }
     }
 
-    fun refreshData(newNotes: List<Note>) {
-        notes = newNotes
+    fun refreshData() {
+        notes = db.getAllNotes(currentUser)
         notifyDataSetChanged()
     }
 }

@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import com.google.firebase.auth.FirebaseAuth
 import com.subhajitrajak.notesapp.Note
 import com.subhajitrajak.notesapp.NotesDatabaseHelper
 import com.subhajitrajak.notesapp.databinding.FragmentAddEditNoteBinding
@@ -26,11 +27,13 @@ class AddEditNoteFragment : Fragment() {
         binding.saveBtn.setOnClickListener {
             val title = binding.editTitle.text.toString()
             val content = binding.editDescription.text.toString()
+            val userId = FirebaseAuth.getInstance().currentUser?.uid ?: ""
+
             if (title.isEmpty() && content.isEmpty()) {
                 Toast.makeText(requireContext(), "Empty note cannot be saved", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             } else {
-                val note = Note(0, title, content)
+                val note = Note(0, title, content, userId)
                 db.insertNote(note)
                 Toast.makeText(requireContext(), "Note saved successfully", Toast.LENGTH_SHORT).show()
                 navController.popBackStack()

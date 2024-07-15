@@ -30,9 +30,11 @@ class NotesListFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
         db = NotesDatabaseHelper(requireContext())
-        notesAdapter = NotesAdapter(db.getAllNotes(), requireContext())
+        notesAdapter = NotesAdapter(db.getAllNotes(auth.currentUser?.uid!!), auth.currentUser?.uid!!, requireContext())
         binding.rv.layoutManager = LinearLayoutManager(requireContext())
         binding.rv.adapter = notesAdapter
+
+        binding.userName.text = "${auth.currentUser?.displayName}"
 
         binding.addBtn.setOnClickListener {
             navController.navigate(R.id.action_notesListFragment_to_addEditNoteFragment)
@@ -57,6 +59,6 @@ class NotesListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        notesAdapter.refreshData(db.getAllNotes())
+        notesAdapter.refreshData()
     }
 }
